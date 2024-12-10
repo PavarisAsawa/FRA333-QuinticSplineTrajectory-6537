@@ -62,7 +62,7 @@ matlab.addons.install('Robotics System Toolbox')
     plotBSplineBasis(knots, d)
     ```
     - โดยจะทำการแสดงค่ากราฟของ Basis Function ที่ช่วงเวลาต่าง ๆ 
-    ![alt text](image.png)
+    ![image](https://github.com/user-attachments/assets/66546c8d-70fe-4135-97b5-d5157f303486)
 
 #### **UR5**
 - **`UR5FowardKinematics.m`** : ทำการหาตำแหน่งปลายมือของ UR5
@@ -117,7 +117,11 @@ control_points1 = [
                 ];
 ExecuteTrajectory(ur5,control_points1,5,5,q);
 ```
-[UR5 Trajectory Video](./video/ur5_trajectory_video.mp4)
+
+
+https://github.com/user-attachments/assets/a64513cf-eeef-4240-9ea0-6f503cd16ad3
+
+
 
 
 
