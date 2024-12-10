@@ -136,6 +136,9 @@ control_points2 = [
 ];
 ExecuteTrajectory(ur5,control_points2,5,1,q);
 ```
+https://github.com/user-attachments/assets/05b8a2b0-055e-480d-a92c-50abf38cbe0c
+
+
 
 ## **B Spline Equation**
 ### B-Spline Formula
@@ -152,12 +155,13 @@ Where:
 
 ### B-Spline Basis Function
 เป็นฟังก์ชันที่กำหนดอิทธิพลของ Control Points ต่อเส้นโค้งในแต่ละช่วง โดย Basis Functions ของ B-Spline สามารถคำนวณได้โดยใช้สมการแบบ Recursive ตามลำดับของ Degree ของ B-Spline จะสามารถหหาได้ดังนี้
+
 $$
-N_{i,0} = 
-\begin{cases} 
+N_{i,0} =
+\begin{array}{ll}
 1 & \text{if } u_i \leq t < u_{i+1} \\
-0 & \text{otherwise }
-\end{cases}
+0 & \text{otherwise}
+\end{array}
 $$
 
 โดยสำหรับ Basis Function สำหรับ Degree ที่สูงขึ้นสามารถคำนวณได้จากสมการแบบ Recursive
@@ -181,6 +185,7 @@ plotBSplineBasis(knot, degree);
 
 โดยจำนวน Knot Value จะมีจำนวนเท่ากับ Control Point + Degree + 1 เสมอ
 ซึ่งจะได้ผลดังภาพ
+![untitled1](https://github.com/user-attachments/assets/7c2da2d0-9ac7-4765-9c27-9a67b651d724)
 
  มีความหมายว่า Control Point แรกจะมีผลในช่วงเวลาที่ 0 ถึง 1 เท่านั้น Control Point ที่ 2 จะมีผลคั้งแต่วินาทีที่ 0 ถึงวินาที่ที่ 2 และเปลี่ยนแปลงตามลำดับโดยทำงานเป็น Piecewise Function
 
