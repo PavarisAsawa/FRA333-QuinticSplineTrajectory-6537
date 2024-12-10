@@ -122,8 +122,81 @@ ExecuteTrajectory(ur5,control_points1,5,5,q);
 https://github.com/user-attachments/assets/a64513cf-eeef-4240-9ea0-6f503cd16ad3
 
 
+ตัวอย่างการใช้งานเพื่อสร้าง End Effector Trajectory โดยใช้ B-Spline Degree ที่ 1 โดยใช้ระยะเวลา 5 วินาทีในการเคลื่อนที่
+```matlab
+ur5 = loadrobot("universalUR5");
+q = homeConfiguration(ur5);
+initial_pos = tform2trvec(getTransform(ur5, q, 'tool0'));
+control_points2 = [
+    initial_pos; % ตำแหน่งปัจจุบัน
+    0.1, 0.2, 0.0;
+    0.2, 0.5, 0.4;
+    0.0, 0.8, 0.1;
+    0.2, 0.2, 0.5;
+];
+ExecuteTrajectory(ur5,control_points2,5,1,q);
+```
 
+## **B Spline Equation**
+### B-Spline Formula
+โดยการหา Trajectory จาก B-Spline Basis Function จะหาได้จากสมการดังนี้
 
+$$
+P(t) = \sum_{i=0}^{N} N_{i,k}(t) \cdot P_i
+$$
 
+Where:
+- $ P(t) $ คือจุดบนเส้นโค้ง B-Spline ที่เวลา t
+- $ N_{i,k}(t) $ คือ Basis Function ของ B-Spline ซึ่งขึ้นกับ Degree (k) และ Knot Vector
+- $ P_i $ Control Points ที่กำหนดรูปทรงของเส้นโค้ง
 
+### B-Spline Basis Function
+เป็นฟังก์ชันที่กำหนดอิทธิพลของ Control Points ต่อเส้นโค้งในแต่ละช่วง โดย Basis Functions ของ B-Spline สามารถคำนวณได้โดยใช้สมการแบบ Recursive ตามลำดับของ Degree ของ B-Spline จะสามารถหหาได้ดังนี้
+$$
+N_{i,0} = 
+\begin{cases} 
+1 & \text{if } u_i \leq t < u_{i+1} \\
+0 & \text{otherwise }
+\end{cases}
+$$
+
+โดยสำหรับ Basis Function สำหรับ Degree ที่สูงขึ้นสามารถคำนวณได้จากสมการแบบ Recursive
+$$
+N_{i,k}\left(t\right)=\frac{t-u_i}{u_{i+k}-u_i}N_{i,k-1}\left(t\right)+\frac{u_{i+k+1}-t}{u_{i+k+1}-u_{i+1}}N_{i+1,k-1}\left(t\right)
+$$
    	
+- $u_i$ คือ Knot Value ใน Knot Vector
+- $t$ คือ เวลาใด ๆ 
+- $i$ คือ จุด Control Point ที่จุด $i$
+- $k$ คือ Degree ของ B-Spline
+
+## **Knot Vector**
+เป็นลำดับของค่าที่ควบคุมช่วงและการเปลี่ยนแปลงของเส้นโค้ง B-Spline โดยการตั้งค่า Knot Vector จะกำหนดลักษณะของเส้นโค้งว่ามีความต่อเนื่องอย่างไรและมีลักษณะการเปลี่ยนทิศทางอย่างไร เช่น 
+
+```
+knot = [0 0 0 1  2 3 4 4 4];
+degree = 2;
+plotBSplineBasis(knot, degree);
+```
+
+โดยจำนวน Knot Value จะมีจำนวนเท่ากับ Control Point + Degree + 1 เสมอ
+ซึ่งจะได้ผลดังภาพ
+
+ มีความหมายว่า Control Point แรกจะมีผลในช่วงเวลาที่ 0 ถึง 1 เท่านั้น Control Point ที่ 2 จะมีผลคั้งแต่วินาทีที่ 0 ถึงวินาที่ที่ 2 และเปลี่ยนแปลงตามลำดับโดยทำงานเป็น Piecewise Function
+
+
+
+## **Refference**
+**[1]** Xu, Y., Liu, Y., Liu, X., Zhao, Y., Li, P., & Xu, P. (2024). Trajectory generation method for serial robots in hybrid space operations. Actuators, 13(3), 108.
+
+**[2]** Gasparetto, A., Boscariol, P., Lanzutti, A., & Vidoni, R. (2012). Trajectory planning in robotics. Mathematics in Computer Science, 6, 269–279.
+
+**[3]** Corke, P., & Haviland, J. (2021, May). Not your grandmother’s toolbox–the robotics toolbox reinvented for python. In 2021 IEEE international conference on robotics and automation (ICRA) (pp. 11357-11363). 
+
+**[4]** Li, W., Tan, M., Wang, L., & Wang, Q. (2020). A cubic spline method combing improved particle swarm optimization for robot path planning in dynamic uncertain environment. International Journal of Advanced Robotic Systems, 17(1), 1729881419891661.
+
+**[5]** Kebria, P. M., Al-Wais, S., Abdi, H., & Nahavandi, S. (2016, October). Kinematic and dynamic modelling of UR5 manipulator. In 2016 IEEE international conference on systems, man, and cybernetics (SMC) (pp. 004229-004234). IEEE. 
+
+**[6]** Wen, Z., Liu, F., Dou, X., Chen, J., & Zhou, D. (2022, December). Research on Kinematics Analysis and Trajectory Planning of UR5 Robot. In Journal of Physics: Conference Series (Vol. 2396, No. 1, p. 012046). IOP Publishing.
+
+**[7]** Yang, T., Tian, Y., Wang, Q., Wang, Y., Jiang, L., & Li, G. (2023, December). Kinematics Analysis and Trajectory Planning of UR5 Robot. In 2023 2nd International Conference on Automation, Robotics and Computer Engineering (ICARCE) (pp. 1-4). IEEE.

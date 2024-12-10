@@ -9,7 +9,7 @@ function [flag] = ExecuteTrajectory(ur5,control_points,t_use,degree,q)
         % แปลง Task Trajectory เป็น Joint Trajectory
         joint_traj = Task2JointTrajectoryMapper(ur5, trajectory, q);
 
-        v = VideoWriter('ur5_trajectory_video', 'MPEG-4'); % ตั้งชื่อไฟล์วีดีโอ
+        v = VideoWriter('ur5_trajectory_video2', 'MPEG-4'); % ตั้งชื่อไฟล์วีดีโอ
         open(v); % เปิดการบันทึกวีดีโอ
     
         % เคลื่อนที่ตาม Trajectory
