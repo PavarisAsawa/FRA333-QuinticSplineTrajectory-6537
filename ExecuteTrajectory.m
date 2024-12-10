@@ -8,9 +8,13 @@ function [flag] = ExecuteTrajectory(ur5,control_points,t_use,degree,q)
     
         % แปลง Task Trajectory เป็น Joint Trajectory
         joint_traj = Task2JointTrajectoryMapper(ur5, trajectory, q);
+
+        v = VideoWriter('ur5_trajectory_video', 'MPEG-4'); % ตั้งชื่อไฟล์วีดีโอ
+        open(v); % เปิดการบันทึกวีดีโอ
     
         % เคลื่อนที่ตาม Trajectory
         figure;
+        set(gcf, 'Position', [100, 100, 1920, 1080]);
         show(ur5, q, 'Frames', 'on', 'PreservePlot', false, 'Collisions', 'off', 'Visuals', 'on');
         hold on;
         plot3(control_points(:,1), control_points(:,2), control_points(:,3), 'ro-', 'LineWidth', 1, 'MarkerSize', 8);
@@ -28,9 +32,12 @@ function [flag] = ExecuteTrajectory(ur5,control_points,t_use,degree,q)
     
             % แสดงตำแหน่งหุ่นยนต์
             show(ur5, q, 'Frames', 'on', 'PreservePlot', false);
+            frame = getframe(gcf);  % ใช้ getframe เพื่อจับภาพจาก figure ปัจจุบัน
+            writeVideo(v, frame);   % เขียน frame ลงในวีดีโอ
             pause(0.01);
             flag = 1;
         end
+        close(v);
     else
         disp("Some points in Trajectory failed IK.");
         flag = 0;

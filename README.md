@@ -25,22 +25,101 @@
 ```cmd
 git clone https://github.com/PavarisAsawa/FRA333-QuinticSplineTrajectory-6537.git
 ```
+ทำการ Download Add ons ของ Robotics System Toolbox ใน Command Window ของ MATLAB
+```cmd
+matlab.addons.install('Robotics System Toolbox')
+```
+
+## **Feature**
+
 ภายในของโปรแกรมจะประกอบด้วย
-### **B-Spline Function**
+#### **B-Spline Function**
 - **`BasisFunction.m`** : เพื่อทำการคำนวณ Basis Function ของสมการ B-Spline ที่เวลาใด ๆ โดยกำหนดจาก Knot
 - **`BasisFunctionDerivative.m`** : ทำการคำนวณอนุพันธ์ลำดับที่ 1 ของ Basis Function
+
+    ```matlab
+    BasisFunction(i, d, t, knots)
+    BasisFunctionDerivative(i, d, t, knots)
+    ```
+    - `i` : Control point ทั้งหมดโดยแต่ละจุดเป็น Matrix ขนาด [3 ; 1] *3 แถว 1 column*
+    - `d` : degree ของ basis function
+    - `knots` : Knot Vector ที่ใช้ในการสร้างสมการ
+    - `t` : Basis function ที่ต้องการหา ณ เวลา t
+    - โดยจะ return เป็นค่าของ Basis function ที่เวลา t
+
 - **`KnotGenerator.m`** : สร้าง Clamped Knot เพื่อกำหนดการทำงานของ Basis Function
+    ```matlab
+    KnotGenerator(i, t_start, t_end, d)
+    ```
+    - `t_start` : เวลาที่เริ่มการทำงานของ Trajectory
+    - `t_end` : เวลาที่สิ้นสุดการทำงานของ Trajectory
+    - โดยจะ return ค่าออกมาเป็น Clamped Knot Vector ขนาด [1 ; (จำนวน Control Point + Degree +1)]
+
 - **`plotBSplineBasis.m`** : พล็อตกราฟของ Basis Function เพื่อตรวจสอบค่าของ Basis Function ของแต่ละ Control Point ในแต่ละช่วงเวลา
-### **UR5**
+    ```matlab
+    knot = [0 0 0 0 1 2 3 3 3 3];  % ตัวอย่าง Knot Vector
+    degree = 3;  % Degree ของ B-Spline
+    plotBSplineBasis(knots, d)
+    ```
+    - โดยจะทำการแสดงค่ากราฟของ Basis Function ที่ช่วงเวลาต่าง ๆ 
+    ![alt text](image.png)
+
+#### **UR5**
 - **`UR5FowardKinematics.m`** : ทำการหาตำแหน่งปลายมือของ UR5
 - **`UR5InverseKinematic.m`** : ทำการ Inverse Kinematic หาตำแหน่งของ Joint
 
-### **Trajectory Generator**
-- **`checkIKForTrajectory.m`** : ทำการ IK ทุกจุดใน Trajectory เพื่อตรวจสอบว่า Trajectory นั้นเป็นจุดที่สามารถเคลื่อนที่ถึงได้โดยใช้ UR5 หรือไม้
-- **`Task2JointTrajectoryMapper.m`** : ทำการแปลง Setpoint ของ Task Space เป็น Joint Space เพื่อควบคุม Joint ของหุ่นยนต์
-- **`TrajectoryGenerator.m`** : สร้างวิถีโคจรที่พิกัดปลายมือ
-- **`ExecuteTrajectory.m`** : ทำการ Simulation การเคลื่อนที่ของหุ่นยนต์
+    ```matlab
+    UR5ForwardKinematics(ur5, q)
+    UR5InverseKinematics(ur5, targetTranslation, q)
+    ```
+    - `ur5` : พารามิเตอร์หุ่นยนต์ ur5
+    - `q` : Joint Configuration โดยเป็น multibody tree
+    - `targetTranslation` : ตำแหน่ง Position ที่ต้องการหา Inverse Kinematic
 
-## Input ของระบบ
+#### **Trajectory Generator**
+- **`checkIKForTrajectory.m`** : ทำการ IK ทุกจุดใน Trajectory เพื่อตรวจสอบว่า Trajectory นั้นเป็นจุดที่สามารถเคลื่อนที่ถึงได้โดยใช้ UR5 หรือไม้
+    ```
+    checkIKForTrajectory(ur5, trajectory, q)
+    ```
+    - `trajectory` : Trajectory ที่ถูกสร้างมา
+
+- **`Task2JointTrajectoryMapper.m`** : ทำการแปลง Setpoint ของ Task Space เป็น Joint Space เพื่อควบคุม Joint ของหุ่นยนต์
+    ```
+    Task2JointTrajectoryMapper(ur5,trajectory,q)
+    ```
+    - โดยจะ return เป็นค่าของ Trajectory ของ Joint Configuration
+
+- **`TrajectoryGenerator.m`** : สร้างวิถีโคจรที่พิกัดปลายมือ
+    ```
+    TrajectoryGenerator(i,t_use, d)
+    ```
+    - `t_use` เวลาที่ใช้ในการเคลื่อนที่ทั้งหมด
+- **`ExecuteTrajectory.m`** : ทำการ Simulation การเคลื่อนที่ของหุ่นยนต์
+    ```
+    ExecuteTrajectory(ur5,i,t_use,d,q)
+    ```
+
+## Use Case
+ตัวอย่างการใช้งานเพื่อสร้าง End Effector Trajectory โดยใช้ B-Spline Degree ที่ 5 โดยใช้ระยะเวลา 5 วินาทีในการเคลื่อนที่
+```matlab
+ur5 = loadrobot("universalUR5");
+q = homeConfiguration(ur5);
+initial_pos = tform2trvec(getTransform(ur5, q, 'tool0'));
+control_points1 = [
+                    initial_pos; % ตำแหน่งปัจจุบัน
+                    0.0, 0.2, 0.0;
+                    0.1, 0.5, 0.3;
+                    0.2, 0.2, 0.2;
+                    0.2, 0.1, 0.3;
+                    0.1, 0.8, 0.2;
+                    0.3, 0.3, 0.1;
+                    0.2, 0.3, 0.5;
+                ];
+ExecuteTrajectory(ur5,control_points1,5,5,q);
+```
+[UR5 Trajectory Video](./video/ur5_trajectory_video.mp4)
+
+
+
 
    	
