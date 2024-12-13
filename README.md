@@ -150,7 +150,7 @@ plotBSplineBasis(knot, degree);
 
  มีความหมายว่า Control Point แรกจะมีผลในช่วงเวลาที่ 0 ถึง 1 เท่านั้น Control Point ที่ 2 จะมีผลคั้งแต่วินาทีที่ 0 ถึงวินาที่ที่ 2 และเปลี่ยนแปลงตามลำดับโดยทำงานเป็น Piecewise Function
 
-## Use Case
+## **ผลการทดสอบ**
 ตัวอย่างการใช้งานเพื่อสร้าง End Effector Trajectory โดยใช้ B-Spline Degree ที่ 5 โดยใช้ระยะเวลา 5 วินาทีในการเคลื่อนที่
 ```matlab
 ur5 = loadrobot("universalUR5");
@@ -189,9 +189,15 @@ ExecuteTrajectory(ur5,control_points2,5,1,q);
 ```
 https://github.com/user-attachments/assets/05b8a2b0-055e-480d-a92c-50abf38cbe0c
 
+#### **More Exmaple** : https://drive.google.com/drive/u/3/folders/1NbhBEOeg3ysZSrKFE5f1FbJwbUL8dYJg
+
 ## **สรุปและวิเคราะห์ผลการทดลอง**
-จากการทดสอบการสร้าง Trajectory พบว่าสามารถสร้างสมการ Trajectory จาก B-Spline ใน Degree ต่าง ๆ ได้ โดยในการประยุกต์การใช้งานจริง อาจจะต้องเพิ่มการ Interpolate ระยะห่างระหว่างเส้นทาง หรือปรับความละเอียด (dt) ในการคำนวณ Trajectory เพื่อความราบรืนของ Trajectory 
-และเพิ่มการควบคุมของความเร็วและความเร่งที่จุด setpoint ต่าง ๆ เพื่อควบคุมความเร็วในการเคลื่อนที่่ที่ End-Effector ด้วยเช่นเดียวกัน
+จากการทดสอบการสร้าง Trajectory พบว่าสามารถสร้างสมการ Trajectory จาก B-Spline ใน Degree ต่าง ๆ ได้โดยเมื่อ Degree ของสมการสูงขึ้นจะเห็นว่าการเคลื่อนที่นั้น
+จะเป็นเส้นโค้งเข้าสู่ Control Points แทนที่เป็น
+
+โดยในการควลคุมตำแหน่งของ Trajectory ของ B Spline เพียงอย่างเดียวนั้นอาจจะมีปัญหาในเรื่องของการจุด setpoint หลัง ๆ ได้เนื่องจากจากการใช้ Order ที่สูงขึ้น
+จะเห็นได้ว่า setpoint นั้นจะมีระยะห่างกันที่มากขึ้นทำให้การเคลื่อนที่มีความต่อเนื่องลดลง โดยสามารถแก้ปัญหาได้โดยการลด dt หรือลดเวลาในการคำนวณใน
+Discrete Time Domain หรือทำการใช้ Velocity/Acceleration เพิ่มเติมเพื่อควบคุมให้การเคลื่อนที่
 
 
 ## **Refference**
@@ -199,12 +205,10 @@ https://github.com/user-attachments/assets/05b8a2b0-055e-480d-a92c-50abf38cbe0c
 
 **[2]** Gasparetto, A., Boscariol, P., Lanzutti, A., & Vidoni, R. (2012). Trajectory planning in robotics. Mathematics in Computer Science, 6, 269–279.
 
-**[3]** Corke, P., & Haviland, J. (2021, May). Not your grandmother’s toolbox–the robotics toolbox reinvented for python. In 2021 IEEE international conference on robotics and automation (ICRA) (pp. 11357-11363). 
+**[3]** Li, W., Tan, M., Wang, L., & Wang, Q. (2020). A cubic spline method combing improved particle swarm optimization for robot path planning in dynamic uncertain environment. International Journal of Advanced Robotic Systems, 17(1), 1729881419891661.
 
-**[4]** Li, W., Tan, M., Wang, L., & Wang, Q. (2020). A cubic spline method combing improved particle swarm optimization for robot path planning in dynamic uncertain environment. International Journal of Advanced Robotic Systems, 17(1), 1729881419891661.
+**[4]** Kebria, P. M., Al-Wais, S., Abdi, H., & Nahavandi, S. (2016, October). Kinematic and dynamic modelling of UR5 manipulator. In 2016 IEEE international conference on systems, man, and cybernetics (SMC) (pp. 004229-004234). IEEE. 
 
-**[5]** Kebria, P. M., Al-Wais, S., Abdi, H., & Nahavandi, S. (2016, October). Kinematic and dynamic modelling of UR5 manipulator. In 2016 IEEE international conference on systems, man, and cybernetics (SMC) (pp. 004229-004234). IEEE. 
+**[5]** Wen, Z., Liu, F., Dou, X., Chen, J., & Zhou, D. (2022, December). Research on Kinematics Analysis and Trajectory Planning of UR5 Robot. In Journal of Physics: Conference Series (Vol. 2396, No. 1, p. 012046). IOP Publishing.
 
-**[6]** Wen, Z., Liu, F., Dou, X., Chen, J., & Zhou, D. (2022, December). Research on Kinematics Analysis and Trajectory Planning of UR5 Robot. In Journal of Physics: Conference Series (Vol. 2396, No. 1, p. 012046). IOP Publishing.
-
-**[7]** Yang, T., Tian, Y., Wang, Q., Wang, Y., Jiang, L., & Li, G. (2023, December). Kinematics Analysis and Trajectory Planning of UR5 Robot. In 2023 2nd International Conference on Automation, Robotics and Computer Engineering (ICARCE) (pp. 1-4). IEEE.
+**[6]** Yang, T., Tian, Y., Wang, Q., Wang, Y., Jiang, L., & Li, G. (2023, December). Kinematics Analysis and Trajectory Planning of UR5 Robot. In 2023 2nd International Conference on Automation, Robotics and Computer Engineering (ICARCE) (pp. 1-4). IEEE.
