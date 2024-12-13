@@ -99,46 +99,6 @@ matlab.addons.install('Robotics System Toolbox')
     ExecuteTrajectory(ur5,i,t_use,d,q)
     ```
 
-## Use Case
-ตัวอย่างการใช้งานเพื่อสร้าง End Effector Trajectory โดยใช้ B-Spline Degree ที่ 5 โดยใช้ระยะเวลา 5 วินาทีในการเคลื่อนที่
-```matlab
-ur5 = loadrobot("universalUR5");
-q = homeConfiguration(ur5);
-initial_pos = tform2trvec(getTransform(ur5, q, 'tool0'));
-control_points1 = [
-                    initial_pos; % ตำแหน่งปัจจุบัน
-                    0.0, 0.2, 0.0;
-                    0.1, 0.5, 0.3;
-                    0.2, 0.2, 0.2;
-                    0.2, 0.1, 0.3;
-                    0.1, 0.8, 0.2;
-                    0.3, 0.3, 0.1;
-                    0.2, 0.3, 0.5;
-                ];
-ExecuteTrajectory(ur5,control_points1,5,5,q);
-```
-
-
-https://github.com/user-attachments/assets/a64513cf-eeef-4240-9ea0-6f503cd16ad3
-
-
-ตัวอย่างการใช้งานเพื่อสร้าง End Effector Trajectory โดยใช้ B-Spline Degree ที่ 1 โดยใช้ระยะเวลา 5 วินาทีในการเคลื่อนที่
-```matlab
-ur5 = loadrobot("universalUR5");
-q = homeConfiguration(ur5);
-initial_pos = tform2trvec(getTransform(ur5, q, 'tool0'));
-control_points2 = [
-    initial_pos; % ตำแหน่งปัจจุบัน
-    0.1, 0.2, 0.0;
-    0.2, 0.5, 0.4;
-    0.0, 0.8, 0.1;
-    0.2, 0.2, 0.5;
-];
-ExecuteTrajectory(ur5,control_points2,5,1,q);
-```
-https://github.com/user-attachments/assets/05b8a2b0-055e-480d-a92c-50abf38cbe0c
-
-
 
 ## **B Spline Equation**
 ### B-Spline Formula
@@ -189,6 +149,48 @@ plotBSplineBasis(knot, degree);
 
  มีความหมายว่า Control Point แรกจะมีผลในช่วงเวลาที่ 0 ถึง 1 เท่านั้น Control Point ที่ 2 จะมีผลคั้งแต่วินาทีที่ 0 ถึงวินาที่ที่ 2 และเปลี่ยนแปลงตามลำดับโดยทำงานเป็น Piecewise Function
 
+## Use Case
+ตัวอย่างการใช้งานเพื่อสร้าง End Effector Trajectory โดยใช้ B-Spline Degree ที่ 5 โดยใช้ระยะเวลา 5 วินาทีในการเคลื่อนที่
+```matlab
+ur5 = loadrobot("universalUR5");
+q = homeConfiguration(ur5);
+initial_pos = tform2trvec(getTransform(ur5, q, 'tool0'));
+control_points1 = [
+                    initial_pos; % ตำแหน่งปัจจุบัน
+                    0.0, 0.2, 0.0;
+                    0.1, 0.5, 0.3;
+                    0.2, 0.2, 0.2;
+                    0.2, 0.1, 0.3;
+                    0.1, 0.8, 0.2;
+                    0.3, 0.3, 0.1;
+                    0.2, 0.3, 0.5;
+                ];
+ExecuteTrajectory(ur5,control_points1,5,5,q);
+```
+
+
+https://github.com/user-attachments/assets/a64513cf-eeef-4240-9ea0-6f503cd16ad3
+
+
+ตัวอย่างการใช้งานเพื่อสร้าง End Effector Trajectory โดยใช้ B-Spline Degree ที่ 1 โดยใช้ระยะเวลา 5 วินาทีในการเคลื่อนที่
+```matlab
+ur5 = loadrobot("universalUR5");
+q = homeConfiguration(ur5);
+initial_pos = tform2trvec(getTransform(ur5, q, 'tool0'));
+control_points2 = [
+    initial_pos; % ตำแหน่งปัจจุบัน
+    0.1, 0.2, 0.0;
+    0.2, 0.5, 0.4;
+    0.0, 0.8, 0.1;
+    0.2, 0.2, 0.5;
+];
+ExecuteTrajectory(ur5,control_points2,5,1,q);
+```
+https://github.com/user-attachments/assets/05b8a2b0-055e-480d-a92c-50abf38cbe0c
+
+## **สรุปและวิเคราะห์ผลการทดลอง**
+จากการทดสอบการสร้าง Trajectory พบว่าสามารถสร้างสมการ Trajectory จาก B-Spline ใน Degree ต่าง ๆ ได้ โดยในการประยุกต์การใช้งานจริง อาจจะต้องเพิ่มการ Interpolate ระยะห่างระหว่างเส้นทาง หรือปรับความละเอียด (dt) ในการคำนวณ Trajectory เพื่อความราบรืนของ Trajectory 
+และเพิ่มการควบคุมของความเร็วและความเร่งที่จุด setpoint ต่าง ๆ เพื่อควบคุมความเร็วในการเคลื่อนที่่ที่ End-Effector ด้วยเช่นเดียวกัน
 
 
 ## **Refference**
