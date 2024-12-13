@@ -46,5 +46,5 @@ control_points3 = [
 % ExecuteTrajectory(ur5,control_points1,5,5,q);
 
 % BasisFunction(control_points1,2,q)
-% ExecuteTrajectory(ur5,control_points1,5,3,q);
-ExecuteTrajectory(ur5,control_points3,10,3,q);
+% ExecuteTrajectory(ur5,control_points1,1,3,q);
+ExecuteTrajectory(ur5,control_points3,5,7,q);
