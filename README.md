@@ -125,6 +125,7 @@ N_{i,0} =
 $$
 
 โดยสำหรับ Basis Function สำหรับ Degree ที่สูงขึ้นสามารถคำนวณได้จากสมการแบบ Recursive
+
 $$
 N_{i,k}(t)=\frac{t-u_i}{u_{i+k}-u_i}N_{i,k-1}(t)+\frac{u_{i+k+1}-t}{u_{i+k+1}-u_{i+1}}N_{i+1,k-1}(t)
 $$
