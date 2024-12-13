@@ -201,7 +201,7 @@ https://github.com/user-attachments/assets/05b8a2b0-055e-480d-a92c-50abf38cbe0c
 Discrete Time Domain หรือทำการใช้ Velocity/Acceleration เพิ่มเติมเพื่อควบคุมให้การเคลื่อนที่
 
 
-## **Refference**
+## **Reference**
 **[1]** Xu, Y., Liu, Y., Liu, X., Zhao, Y., Li, P., & Xu, P. (2024). Trajectory generation method for serial robots in hybrid space operations. Actuators, 13(3), 108.
 
 **[2]** Gasparetto, A., Boscariol, P., Lanzutti, A., & Vidoni, R. (2012). Trajectory planning in robotics. Mathematics in Computer Science, 6, 269–279.
